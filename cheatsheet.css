@@ -1,0 +1,31 @@
+/*  CSS Cheatsheet
+By John Cotterell johnmdcotterell@gmail.com
+www.cotterzz.com  github.com/cotterzz/       */
+
+/* Part 0 - COMMENTS. This is a comment */
+
+/* Comments are ignored by the parser and are for humans to read */
+
+/*  Comments can stretch
+           over multiple lines
+                           like this */
+
+/* PART 1 - SELECTORS
+* - Universal selector, css rules are applied to all elements */
+* {
+	/* CSS rules go here */
+}
+
+/* Type selectors
+Rules are applied to all elements of that type
+eg: all div tags */
+
+div {
+	/* CSS rules go here */
+}
+
+/* all h1 elements */
+
+h1 {
+	/* CSS rules go here */
+}
