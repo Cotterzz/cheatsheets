@@ -1,0 +1,9 @@
+<!-- XML Cheatsheet By John Cotterell johnmdcotterell@gmail.com www.cotterzz.com  github.com/cotterzz/ -->
+
+<!-- This is an XML comment, they work the same way as HTML comments.
+         They can be multiline like this
+              And can contain any characters except for the two dashes that appear in their start and end tags -->
+              
+<!-- Comments are only for humans to read when editing the XML, and are not part of the XML data -->
+
+<?xml version="1.0"?>
