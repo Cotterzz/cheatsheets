@@ -71,9 +71,23 @@ $ (?# End of string)
 extensively tested. Please use with caution and test thoroughly before use.
 Will Match)
 
+(?# product key:)
+[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}
+
 
  
+(BlockL)\d\-(...)(\,\"\:|\,\:)(.*)((Block\"\,)|(Block\,))\d\,(True|False)\,\d\d
+\"\,(category)\,\d\,(True|False)\,\d\d
+(.*)\"\>(.*)\<\/title\>\<img src="(.*)" height="100" width="76">
+^(.*)\"aws-internal\/3 aws-sdk-java(.*)\" -
 
+^(.*)82\.11\.108\.82\.(.*)
+
+
+^\{\"crawlTimeMsec\"\:\"(.*)\]\,\"title\"\:\"
+
+^((.*)(REST\.|82\.11\.108\.82)(.*)
+)|5524099ba640946c51c2fda7ca54302ff0a857e57a04c70ad555b75efbbf3f3e www.cotterzz.com 
  
  
 
