@@ -14,3 +14,8 @@ x = 42; // this assigns a value to x, without declaring it first.
 var x = 42; // this declares variable x and assigns it a numerical value, in one line.
 var x, y, z; // this declares several variables in one go.
 var x=42, y=53, z=67; // this declares several variables and assigns them values.
+
+
+for (var i = 0; i < 100; i++) { 
+	
+}
