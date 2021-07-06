@@ -1,5 +1,5 @@
 *This is the markdown cheatsheet from markdownguide.org, I figure there's no point rewriting it*
-*I didn't write it, nor do I own any rights to it"
+*I didn't write it, nor do I own any rights to it*
 *please visit the links below for the most recent version, and more information about markdown*
 
 # Markdown Cheat Sheet
