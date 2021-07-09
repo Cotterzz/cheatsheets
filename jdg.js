@@ -1,429 +1,414 @@
-/* Chapter 1. Introduction to JavaScript
-JavaScript is the programming language of the web. The overwhelming majority of websites use JavaScript, and all modern web browsers—on desktops, tablets, and phones—include JavaScript interpreters, making JavaScript the most-deployed programming language in history. Over the last decade, Node.js has enabled JavaScript programming outside of web browsers, and the dramatic success of Node means that JavaScript is now also the most-used programming language among software developers. Whether you’re starting from scratch or are already using JavaScript professionally, this book will help you master the language.
-
-If you are already familiar with other programming languages, it may help you to know that JavaScript is a high-level, dynamic, interpreted programming language that is well-suited to object-oriented and functional programming styles. JavaScript’s variables are untyped. Its syntax is loosely based on Java, but the languages are otherwise unrelated. JavaScript derives its first-class functions from Scheme and its prototype-based inheritance from the little-known language Self. But you do not need to know any of those languages, or be familiar with those terms, to use this book and learn JavaScript.
-
-The name “JavaScript” is quite misleading. Except for a superficial syntactic resemblance, JavaScript is completely different from the Java programming language. And JavaScript has long since outgrown its scripting-language roots to become a robust and efficient general-purpose language suitable for serious software engineering and projects with huge codebases.
-
-JAVASCRIPT: NAMES, VERSIONS, AND MODES
-JavaScript was created at Netscape in the early days of the web, and technically, “JavaScript” is a trademark licensed from Sun Microsystems (now Oracle) used to describe Netscape’s (now Mozilla’s) implementation of the language. Netscape submitted the language for standardization to ECMA—the European Computer Manufacturer’s Association—and because of trademark issues, the standardized version of the language was stuck with the awkward name “ECMAScript.” In practice, everyone just calls the language JavaScript. This book uses the name “ECMAScript” and the abbreviation “ES” to refer to the language standard and to versions of that standard.
-
-For most of the 2010s, version 5 of the ECMAScript standard has been supported by all web browsers. This book treats ES5 as the compatibility baseline and no longer discusses earlier versions of the language. ES6 was released in 2015 and added major new features—including class and module syntax—that changed JavaScript from a scripting language into a serious, general-purpose language suitable for large-scale software engineering. Since ES6, the ECMAScript specification has moved to a yearly release cadence, and versions of the language—ES2016, ES2017, ES2018, ES2019, and ES2020—are now identified by year of release.
-
-As JavaScript evolved, the language designers attempted to correct flaws in the early (pre-ES5) versions. In order to maintain backward compatibility, it is not possible to remove legacy features, no matter how flawed. But in ES5 and later, programs can opt in to JavaScript’s strict mode in which a number of early language mistakes have been corrected. The mechanism for opting in is the “use strict” directive described in §5.6.3. That section also summarizes the differences between legacy JavaScript and strict JavaScript. In ES6 and later, the use of new language features often implicitly invokes strict mode. For example, if you use the ES6 class keyword or create an ES6 module, then all the code within the class or module is automatically strict, and the old, flawed features are not available in those contexts. This book will cover the legacy features of JavaScript but is careful to point out that they are not available in strict mode.
-
-To be useful, every language must have a platform, or standard library, for performing things like basic input and output. The core JavaScript language defines a minimal API for working with numbers, text, arrays, sets, maps, and so on, but does not include any input or output functionality. Input and output (as well as more sophisticated features, such as networking, storage, and graphics) are the responsibility of the “host environment” within which JavaScript is embedded.
-
-The original host environment for JavaScript was a web browser, and this is still the most common execution environment for JavaScript code. The web browser environment allows JavaScript code to obtain input from the user’s mouse and keyboard and by making HTTP requests. And it allows JavaScript code to display output to the user with HTML and CSS.
-
-Since 2010, another host environment has been available for JavaScript code. Instead of constraining JavaScript to work with the APIs provided by a web browser, Node gives JavaScript access to the entire operating system, allowing JavaScript programs to read and write files, send and receive data over the network, and make and serve HTTP requests. Node is a popular choice for implementing web servers and also a convenient tool for writing simple utility scripts as an alternative to shell scripts.
-
-Most of this book is focused on the JavaScript language itself. Chapter 11 documents the JavaScript standard library, Chapter 15 introduces the web browser host environment, and Chapter 16 introduces the Node host environment.
-
-This book covers low-level fundamentals first, and then builds on those to more advanced and higher-level abstractions. The chapters are intended to be read more or less in order. But learning a new programming language is never a linear process, and describing a language is not linear either: each language feature is related to other features, and this book is full of cross-references—sometimes backward and sometimes forward—to related material. This introductory chapter makes a quick first pass through the language, introducing key features that will make it easier to understand the in-depth treatment in the chapters that follow. If you are already a practicing JavaScript programmer, you can probably skip this chapter. (Although you might enjoy reading Example 1-1 at the end of the chapter before you move on.)
-
-1.1 Exploring JavaScript
-When learning a new programming language, it’s important to try the examples in the book, then modify them and try them again to test your understanding of the language. To do that, you need a JavaScript interpreter.
-
-The easiest way to try out a few lines of JavaScript is to open up the web developer tools in your web browser (with F12, Ctrl-Shift-I, or Command-Option-I) and select the Console tab. You can then type code at the prompt and see the results as you type. Browser developer tools often appear as panes at the bottom or right of the browser window, but you can usually detach them as separate windows (as pictured in Figure 1-1), which is often quite convenient.
-
-js7e 0101
-Figure 1-1. The JavaScript console in Firefox’s Developer Tools
-Another way to try out JavaScript code is to download and install Node from https://nodejs.org. Once Node is installed on your system, you can simply open a Terminal window and type node to begin an interactive JavaScript session like this one:
-
-$ node
-Welcome to Node.js v12.13.0.
-Type ".help" for more information.
-> .help
-.break    Sometimes you get stuck, this gets you out
-.clear    Alias for .break
-.editor   Enter editor mode
-.exit     Exit the repl
-.help     Print this help message
-.load     Load JS from a file into the REPL session
-.save     Save all evaluated commands in this REPL session to a file
-
-Press ^C to abort current expression, ^D to exit the repl
-> let x = 2, y = 3;
-undefined
-> x + y
-5
-> (x === 2) && (y === 3)
-true
-> (x > 3) || (y < 3)
-false
-1.2 Hello World
-When you are ready to start experimenting with longer chunks of code, these line-by-line interactive environments may no longer be suitable, and you will probably prefer to write your code in a text editor. From there, you can copy and paste to the JavaScript console or into a Node session. Or you can save your code to a file (the traditional filename extension for JavaScript code is .js) and then run that file of JavaScript code with Node:
-
-$ node snippet.js
-If you use Node in a noninteractive manner like this, it won’t automatically print out the value of all the code you run, so you’ll have to do that yourself. You can use the function console.log() to display text and other JavaScript values in your terminal window or in a browser’s developer tools console. So, for example, if you create a hello.js file containing this line of code:
-
-console.log("Hello World!");
-and execute the file with node hello.js, you’ll see the message “Hello World!” printed out.
-
-If you want to see that same message printed out in the JavaScript console of a web browser, create a new file named hello.html, and put this text in it:
-
-<script src="hello.js"></script>
-Then load hello.html into your web browser using a file:// URL like this one:
-
-file:///Users/username/javascript/hello.html
-Open the developer tools window to see the greeting in the console.
-
-1.3 A Tour of JavaScript
-This section presents a quick introduction, through code examples, to the JavaScript language. After this introductory chapter, we dive into JavaScript at the lowest level: Chapter 2 explains things like JavaScript comments, semicolons, and the Unicode character set. Chapter 3 starts to get more interesting: it explains JavaScript variables and the values you can assign to those variables.
-
-Here’s some sample code to illustrate the highlights of those two chapters:*/
-
-// Anything following double slashes is an English-language comment.
-// Read the comments carefully: they explain the JavaScript code.
-
-// A variable is a symbolic name for a value.
-// Variables are declared with the let keyword:
-let x;                     // Declare a variable named x.
-
-// Values can be assigned to variables with an = sign
-x = 0;                     // Now the variable x has the value 0
-x                          // => 0: A variable evaluates to its value.
-
-// JavaScript supports several types of values
-x = 1;                     // Numbers.
-x = 0.01;                  // Numbers can be integers or reals.
-x = "hello world";         // Strings of text in quotation marks.
-x = 'JavaScript';          // Single quote marks also delimit strings.
-x = true;                  // A Boolean value.
-x = false;                 // The other Boolean value.
-x = null;                  // Null is a special value that means "no value."
-x = undefined;             // Undefined is another special value like null.
-// Two other very important types that JavaScript programs can manipulate are objects and arrays. These are the subjects of Chapters 6 and 7, but they are so important that you’ll see them many times before you reach those chapters:
-
-// JavaScript's most important datatype is the object.
-// An object is a collection of name/value pairs, or a string to value map.
-let book = {               // Objects are enclosed in curly braces.
-    topic: "JavaScript",   // The property "topic" has value "JavaScript."
-    edition: 7             // The property "edition" has value 7
-};                         // The curly brace marks the end of the object.
-
-// Access the properties of an object with . or []:
-book.topic                 // => "JavaScript"
-book["edition"]            // => 7: another way to access property values.
-book.author = "Flanagan";  // Create new properties by assignment.
-book.contents = {};        // {} is an empty object with no properties.
-
-// Conditionally access properties with ?. (ES2020):
-book.contents?.ch01?.sect1 // => undefined: book.contents has no ch01 property.
-
-// JavaScript also supports arrays (numerically indexed lists) of values:
-let primes = [2, 3, 5, 7]; // An array of 4 values, delimited with [ and ].
-primes[0]                  // => 2: the first element (index 0) of the array.
-primes.length              // => 4: how many elements in the array.
-primes[primes.length-1]    // => 7: the last element of the array.
-primes[4] = 9;             // Add a new element by assignment.
-primes[4] = 11;            // Or alter an existing element by assignment.
-let empty = [];            // [] is an empty array with no elements.
-empty.length               // => 0
-
-// Arrays and objects can hold other arrays and objects:
-let points = [             // An array with 2 elements.
-    {x: 0, y: 0},          // Each element is an object.
-    {x: 1, y: 1}
-];
-let data = {                 // An object with 2 properties
-    trial1: [[1,2], [3,4]],  // The value of each property is an array.
-    trial2: [[2,3], [4,5]]   // The elements of the arrays are arrays.
-};
-// COMMENT SYNTAX IN CODE EXAMPLES
-// You may have noticed in the preceding code that some of the comments begin with an arrow (=>). These show the value produced by the code before the comment and are my attempt to emulate an interactive JavaScript environment like a web browser console in a printed book.
-
-// Those // => comments also serve as an assertion, and I’ve written a tool that tests the code and verifies that it produces the value specified in the comment. This should help, I hope, to reduce errors in the book.
-
-// There are two related styles of comment/assertion. If you see a comment of the form // a == 42, it means that after the code before the comment runs, the variable a will have the value 42. If you see a comment of the form // !, it means that the code on the line before the comment throws an exception (and the rest of the comment after the exclamation mark usually explains what kind of exception is thrown).
-
-// You’ll see these comments used throughout the book.
-
-// The syntax illustrated here for listing array elements within square braces or mapping object property names to property values inside curly braces is known as an initializer expression, and it is just one of the topics of Chapter 4. An expression is a phrase of JavaScript that can be evaluated to produce a value. For example, the use of . and [] to refer to the value of an object property or array element is an expression.
-
-// One of the most common ways to form expressions in JavaScript is to use operators:
-
-// Operators act on values (the operands) to produce a new value.
-// Arithmetic operators are some of the simplest:
-3 + 2                      // => 5: addition
-3 - 2                      // => 1: subtraction
-3 * 2                      // => 6: multiplication
-3 / 2                      // => 1.5: division
-points[1].x - points[0].x  // => 1: more complicated operands also work
-"3" + "2"                  // => "32": + adds numbers, concatenates strings
-
-// JavaScript defines some shorthand arithmetic operators
-let count = 0;             // Define a variable
-count++;                   // Increment the variable
-count--;                   // Decrement the variable
-count += 2;                // Add 2: same as count = count + 2;
-count *= 3;                // Multiply by 3: same as count = count * 3;
-count                      // => 6: variable names are expressions, too.
-
-// Equality and relational operators test whether two values are equal,
-// unequal, less than, greater than, and so on. They evaluate to true or false.
-let x = 2, y = 3;          // These = signs are assignment, not equality tests
-x === y                    // => false: equality
-x !== y                    // => true: inequality
-x < y                      // => true: less-than
-x <= y                     // => true: less-than or equal
-x > y                      // => false: greater-than
-x >= y                     // => false: greater-than or equal
-"two" === "three"          // => false: the two strings are different
-"two" > "three"            // => true: "tw" is alphabetically greater than "th"
-false === (x > y)          // => true: false is equal to false
-
-// Logical operators combine or invert boolean values
-(x === 2) && (y === 3)     // => true: both comparisons are true. && is AND
-(x > 3) || (y < 3)         // => false: neither comparison is true. || is OR
-!(x === y)                 // => true: ! inverts a boolean value
-// If JavaScript expressions are like phrases, then JavaScript statements are like full sentences. Statements are the topic of Chapter 5. Roughly, an expression is something that computes a value but doesn’t do anything: it doesn’t alter the program state in any way. Statements, on the other hand, don’t have a value, but they do alter the state. You’ve seen variable declarations and assignment statements above. The other broad category of statement is control structures, such as conditionals and loops. You’ll see examples below, after we cover functions.
-
-// A function is a named and parameterized block of JavaScript code that you define once, and can then invoke over and over again. Functions aren’t covered formally until Chapter 8, but like objects and arrays, you’ll see them many times before you get to that chapter. Here are some simple examples:
-
-// Functions are parameterized blocks of JavaScript code that we can invoke.
-function plus1(x) {        // Define a function named "plus1" with parameter "x"
-    return x + 1;          // Return a value one larger than the value passed in
-}                          // Functions are enclosed in curly braces
-
-plus1(y)                   // => 4: y is 3, so this invocation returns 3+1
-
-let square = function(x) { // Functions are values and can be assigned to vars
-    return x * x;          // Compute the function's value
-};                         // Semicolon marks the end of the assignment.
-
-square(plus1(y))           // => 16: invoke two functions in one expression
-// In ES6 and later, there is a shorthand syntax for defining functions. This concise syntax uses => to separate the argument list from the function body, so functions defined this way are known as arrow functions. Arrow functions are most commonly used when you want to pass an unnamed function as an argument to another function. The preceding code looks like this when rewritten to use arrow functions:
-
-const plus1 = x => x + 1;   // The input x maps to the output x + 1
-const square = x => x * x;  // The input x maps to the output x * x
-plus1(y)                    // => 4: function invocation is the same
-square(plus1(y))            // => 16
-// When we use functions with objects, we get methods:
-
-// When functions are assigned to the properties of an object, we call
-// them "methods."  All JavaScript objects (including arrays) have methods:
-let a = [];                // Create an empty array
-a.push(1,2,3);             // The push() method adds elements to an array
-a.reverse();               // Another method: reverse the order of elements
-
-// We can define our own methods, too. The "this" keyword refers to the object
-// on which the method is defined: in this case, the points array from earlier.
-points.dist = function() { // Define a method to compute distance between points
-    let p1 = this[0];      // First element of array we're invoked on
-    let p2 = this[1];      // Second element of the "this" object
-    let a = p2.x-p1.x;     // Difference in x coordinates
-    let b = p2.y-p1.y;     // Difference in y coordinates
-    return Math.sqrt(a*a + // The Pythagorean theorem
-                     b*b); // Math.sqrt() computes the square root
-};
-points.dist()              // => Math.sqrt(2): distance between our 2 points
-// Now, as promised, here are some functions whose bodies demonstrate common JavaScript control structure statements:
-
-// JavaScript statements include conditionals and loops using the syntax
-// of C, C++, Java, and other languages.
-function abs(x) {          // A function to compute the absolute value.
-    if (x >= 0) {          // The if statement...
-        return x;          // executes this code if the comparison is true.
-    }                      // This is the end of the if clause.
-    else {                 // The optional else clause executes its code if
-        return -x;         // the comparison is false.
-    }                      // Curly braces optional when 1 statement per clause.
-}                          // Note return statements nested inside if/else.
-abs(-10) === abs(10)       // => true
-
-function sum(array) {      // Compute the sum of the elements of an array
-    let sum = 0;           // Start with an initial sum of 0.
-    for(let x of array) {  // Loop over array, assigning each element to x.
-        sum += x;          // Add the element value to the sum.
-    }                      // This is the end of the loop.
-    return sum;            // Return the sum.
-}
-sum(primes)                // => 28: sum of the first 5 primes 2+3+5+7+11
-
-function factorial(n) {    // A function to compute factorials
-    let product = 1;       // Start with a product of 1
-    while(n > 1) {         // Repeat statements in {} while expr in () is true
-        product *= n;      // Shortcut for product = product * n;
-        n--;               // Shortcut for n = n - 1
-    }                      // End of loop
-    return product;        // Return the product
-}
-factorial(4)               // => 24: 1*4*3*2
-
-function factorial2(n) {   // Another version using a different loop
-    let i, product = 1;    // Start with 1
-    for(i=2; i <= n; i++)  // Automatically increment i from 2 up to n
-        product *= i;      // Do this each time. {} not needed for 1-line loops
-    return product;        // Return the factorial
-}
-factorial2(5)              // => 120: 1*2*3*4*5
-// JavaScript supports an object-oriented programming style, but it is significantly different than “classical” object-oriented programming languages. Chapter 9 covers object-oriented programming in JavaScript in detail, with lots of examples. Here is a very simple example that demonstrates how to define a JavaScript class to represent 2D geometric points. Objects that are instances of this class have a single method, named distance(), that computes the distance of the point from the origin:
-
-class Point {              // By convention, class names are capitalized.
-    constructor(x, y) {    // Constructor function to initialize new instances.
-        this.x = x;        // This keyword is the new object being initialized.
-        this.y = y;        // Store function arguments as object properties.
-    }                      // No return is necessary in constructor functions.
-
-    distance() {           // Method to compute distance from origin to point.
-        return Math.sqrt(  // Return the square root of x² + y².
-            this.x * this.x +  // this refers to the Point object on which
-            this.y * this.y    // the distance method is invoked.
-        );
+{   /* Chapter 1. Introduction to JavaScript
+    JavaScript is the programming language of the web. The overwhelming majority of websites use JavaScript, and all modern web browsers—on desktops, tablets, and phones—include JavaScript interpreters, making JavaScript the most-deployed programming language in history. Over the last decade, Node.js has enabled JavaScript programming outside of web browsers, and the dramatic success of Node means that JavaScript is now also the most-used programming language among software developers. Whether you’re starting from scratch or are already using JavaScript professionally, this book will help you master the language.
+    If you are already familiar with other programming languages, it may help you to know that JavaScript is a high-level, dynamic, interpreted programming language that is well-suited to object-oriented and functional programming styles. JavaScript’s variables are untyped. Its syntax is loosely based on Java, but the languages are otherwise unrelated. JavaScript derives its first-class functions from Scheme and its prototype-based inheritance from the little-known language Self. But you do not need to know any of those languages, or be familiar with those terms, to use this book and learn JavaScript.
+    The name “JavaScript” is quite misleading. Except for a superficial syntactic resemblance, JavaScript is completely different from the Java programming language. And JavaScript has long since outgrown its scripting-language roots to become a robust and efficient general-purpose language suitable for serious software engineering and projects with huge codebases.
+    JAVASCRIPT: NAMES, VERSIONS, AND MODES
+    JavaScript was created at Netscape in the early days of the web, and technically, “JavaScript” is a trademark licensed from Sun Microsystems (now Oracle) used to describe Netscape’s (now Mozilla’s) implementation of the language. Netscape submitted the language for standardization to ECMA—the European Computer Manufacturer’s Association—and because of trademark issues, the standardized version of the language was stuck with the awkward name “ECMAScript.” In practice, everyone just calls the language JavaScript. This book uses the name “ECMAScript” and the abbreviation “ES” to refer to the language standard and to versions of that standard.
+    For most of the 2010s, version 5 of the ECMAScript standard has been supported by all web browsers. This book treats ES5 as the compatibility baseline and no longer discusses earlier versions of the language. ES6 was released in 2015 and added major new features—including class and module syntax—that changed JavaScript from a scripting language into a serious, general-purpose language suitable for large-scale software engineering. Since ES6, the ECMAScript specification has moved to a yearly release cadence, and versions of the language—ES2016, ES2017, ES2018, ES2019, and ES2020—are now identified by year of release.
+    As JavaScript evolved, the language designers attempted to correct flaws in the early (pre-ES5) versions. In order to maintain backward compatibility, it is not possible to remove legacy features, no matter how flawed. But in ES5 and later, programs can opt in to JavaScript’s strict mode in which a number of early language mistakes have been corrected. The mechanism for opting in is the “use strict” directive described in §5.6.3. That section also summarizes the differences between legacy JavaScript and strict JavaScript. In ES6 and later, the use of new language features often implicitly invokes strict mode. For example, if you use the ES6 class keyword or create an ES6 module, then all the code within the class or module is automatically strict, and the old, flawed features are not available in those contexts. This book will cover the legacy features of JavaScript but is careful to point out that they are not available in strict mode.
+    To be useful, every language must have a platform, or standard library, for performing things like basic input and output. The core JavaScript language defines a minimal API for working with numbers, text, arrays, sets, maps, and so on, but does not include any input or output functionality. Input and output (as well as more sophisticated features, such as networking, storage, and graphics) are the responsibility of the “host environment” within which JavaScript is embedded.
+    The original host environment for JavaScript was a web browser, and this is still the most common execution environment for JavaScript code. The web browser environment allows JavaScript code to obtain input from the user’s mouse and keyboard and by making HTTP requests. And it allows JavaScript code to display output to the user with HTML and CSS.
+    Since 2010, another host environment has been available for JavaScript code. Instead of constraining JavaScript to work with the APIs provided by a web browser, Node gives JavaScript access to the entire operating system, allowing JavaScript programs to read and write files, send and receive data over the network, and make and serve HTTP requests. Node is a popular choice for implementing web servers and also a convenient tool for writing simple utility scripts as an alternative to shell scripts.
+    Most of this book is focused on the JavaScript language itself. Chapter 11 documents the JavaScript standard library, Chapter 15 introduces the web browser host environment, and Chapter 16 introduces the Node host environment.
+    This book covers low-level fundamentals first, and then builds on those to more advanced and higher-level abstractions. The chapters are intended to be read more or less in order. But learning a new programming language is never a linear process, and describing a language is not linear either: each language feature is related to other features, and this book is full of cross-references—sometimes backward and sometimes forward—to related material. This introductory chapter makes a quick first pass through the language, introducing key features that will make it easier to understand the in-depth treatment in the chapters that follow. If you are already a practicing JavaScript programmer, you can probably skip this chapter. (Although you might enjoy reading Example 1-1 at the end of the chapter before you move on.)*/
+    {   /* 1.1 Exploring JavaScript
+        When learning a new programming language, it’s important to try the examples in the book, then modify them and try them again to test your understanding of the language. To do that, you need a JavaScript interpreter.
+        The easiest way to try out a few lines of JavaScript is to open up the web developer tools in your web browser (with F12, Ctrl-Shift-I, or Command-Option-I) and select the Console tab. You can then type code at the prompt and see the results as you type. Browser developer tools often appear as panes at the bottom or right of the browser window, but you can usually detach them as separate windows (as pictured in Figure 1-1), which is often quite convenient.
+        js7e 0101
+        Figure 1-1. The JavaScript console in Firefox’s Developer Tools
+        Another way to try out JavaScript code is to download and install Node from https://nodejs.org. Once Node is installed on your system, you can simply open a Terminal window and type node to begin an interactive JavaScript session like this one:
+        $ node
+        Welcome to Node.js v12.13.0.
+        Type ".help" for more information.
+        > .help
+        .break    Sometimes you get stuck, this gets you out
+        .clear    Alias for .break
+        .editor   Enter editor mode
+        .exit     Exit the repl
+        .help     Print this help message
+        .load     Load JS from a file into the REPL session
+        .save     Save all evaluated commands in this REPL session to a file
+        Press ^C to abort current expression, ^D to exit the repl
+        > let x = 2, y = 3;
+        undefined
+        > x + y
+        5
+        > (x === 2) && (y === 3)
+        true
+        > (x > 3) || (y < 3)
+        false*/
     }
-}
-
-// Use the Point() constructor function with "new" to create Point objects
-let p = new Point(1, 1);   // The geometric point (1,1).
-
-// Now use a method of the Point object p
-p.distance()               // => Math.SQRT2
-// This introductory tour of JavaScript’s fundamental syntax and capabilities ends here, but the book continues with self-contained chapters that cover additional features of the language:
-
-/* Chapter 10, Modules
-Shows how JavaScript code in one file or script can use JavaScript functions and classes defined in other files or scripts.
-
-Chapter 11, The JavaScript Standard Library
-Covers the built-in functions and classes that are available to all JavaScript programs. This includes important data stuctures like maps and sets, a regular expression class for textual pattern matching, functions for serializing JavaScript data structures, and much more.
-
-Chapter 12, Iterators and Generators
-Explains how the for/of loop works and how you can make your own classes iterable with for/of. It also covers generator functions and the yield statement.
-
-Chapter 13, Asynchronous JavaScript
-This chapter is an in-depth exploration of asynchronous programming in JavaScript, covering callbacks and events, Promise-based APIs, and the async and await keywords. Although the core JavaScript language is not asynchronous, asynchronous APIs are the default in both web browsers and Node, and this chapter explains the techniques for working with those APIs.
-
-Chapter 14, Metaprogramming
-Introduces a number of advanced features of JavaScript that may be of interest to programmers writing libraries of code for other JavaScript programmers to use.
-
-Chapter 15, JavaScript in Web Browsers
-Introduces the web browser host environment, explains how web browsers execute JavaScript code, and covers the most important of the many APIs defined by web browsers. This is by far the longest chapter in the book.
-
-Chapter 16, Server-Side JavaScript with Node
-Introduces the Node host environment, covering the fundamental programming model and the data structures and APIs that are most important to understand.
-
-Chapter 17, JavaScript Tools and Extensions
-Covers tools and language extensions that are worth knowing about because they are widely used and may make you a more productive programmer.
-
-1.4 Example: Character Frequency Histograms
-This chapter concludes with a short but nontrivial JavaScript program. Example 1-1 is a Node program that reads text from standard input, computes a character frequency histogram from that text, and then prints out the histogram. You could invoke the program like this to analyze the character frequency of its own source code:
-
-$ node charfreq.js < charfreq.js
-T: ########### 11.22%
-E: ########## 10.15%
-R: ####### 6.68%
-S: ###### 6.44%
-A: ###### 6.16%
-N: ###### 5.81%
-O: ##### 5.45%
-I: ##### 4.54%
-H: #### 4.07%
-C: ### 3.36%
-L: ### 3.20%
-U: ### 3.08%
-/: ### 2.88%
-This example uses a number of advanced JavaScript features and is intended to demonstrate what real-world JavaScript programs can look like. You should not expect to understand all of the code yet, but be assured that all of it will be explained in the chapters that follow.
-
-Example 1-1. Computing character frequency histograms with JavaScript
-
- * This Node program reads text from standard input, computes the frequency
- * of each letter in that text, and displays a histogram of the most
- * frequently used characters. It requires Node 12 or higher to run.
- *
- * In a Unix-type environment you can invoke the program like this:
- *    node charfreq.js < corpus.txt
- */
-
-// This class extends Map so that the get() method returns the specified
-// value instead of null when the key is not in the map
-class DefaultMap extends Map {
-    constructor(defaultValue) {
-        super();                          // Invoke superclass constructor
-        this.defaultValue = defaultValue; // Remember the default value
+    {   /* 1.2 Hello World
+        When you are ready to start experimenting with longer chunks of code, these line-by-line interactive environments may no longer be  suitable, and you will probably prefer to write your code in a text editor. From there, you can copy and paste to the JavaScript     console or into a Node session. Or you can save your code to a file (the traditional filename extension for JavaScript code is  .js) and then run that file of JavaScript code with Node:
+        $ node snippet.js
+        If you use Node in a noninteractive manner like this, it won’t automatically print out the value of all the code you run, so    you’ll have to do that yourself. You can use the function console.log() to display text and other JavaScript values in your    terminal window or in a browser’s developer tools console. So, for example, if you create a hello.js file containing this line of  code:
+        console.log("Hello World!");
+        and execute the file with node hello.js, you’ll see the message “Hello World!” printed out.
+        If you want to see that same message printed out in the JavaScript console of a web browser, create a new file named hello.html,    and put this text in it:
+        <script src="hello.js"></script>
+        Then load hello.html into your web browser using a file:// URL like this one:
+        file:///Users/username/javascript/hello.html
+        Open the developer tools window to see the greeting in the console.*/
     }
+    {   /* 1.3 A Tour of JavaScript
+        This section presents a quick introduction, through code examples, to the JavaScript language. After this introductory chapter, we dive into JavaScript at the lowest level: Chapter 2 explains things like JavaScript comments, semicolons, and the Unicode character set. Chapter 3 starts to get more interesting: it explains JavaScript variables and the values you can assign to those variables.*/
 
-    get(key) {
-        if (this.has(key)) {              // If the key is already in the map
-            return super.get(key);        // return its value from superclass.
+        // Here’s some sample code to illustrate the highlights of those two chapters:
+        
+        // Anything following double slashes is an English-language comment.
+        // Read the comments carefully: they explain the JavaScript code.
+        
+        // A variable is a symbolic name for a value.
+        // Variables are declared with the let keyword:
+        let x;                     // Declare a variable named x.
+        
+        // Values can be assigned to variables with an = sign
+        x = 0;                     // Now the variable x has the value 0
+        x                          // => 0: A variable evaluates to its value.
+        
+        // JavaScript supports several types of values
+        x = 1;                     // Numbers.
+        x = 0.01;                  // Numbers can be integers or reals.
+        x = "hello world";         // Strings of text in quotation marks.
+        x = 'JavaScript';          // Single quote marks also delimit strings.
+        x = true;                  // A Boolean value.
+        x = false;                 // The other Boolean value.
+        x = null;                  // Null is a special value that means "no value."
+        x = undefined;             // Undefined is another special value like null.
+        // Two other very important types that JavaScript programs can manipulate are objects and arrays. These are the subjects of Chapters 6 and 7, but they are so important that you’ll see them many times before you reach those chapters:
+
+        // JavaScript's most important datatype is the object.
+        // An object is a collection of name/value pairs, or a string to value map.
+        let book = {               // Objects are enclosed in curly braces.
+            topic: "JavaScript",   // The property "topic" has value "JavaScript."
+            edition: 7             // The property "edition" has value 7
+        };                         // The curly brace marks the end of the object.
+        
+        // Access the properties of an object with . or []:
+        book.topic                 // => "JavaScript"
+        book["edition"]            // => 7: another way to access property values.
+        book.author = "Flanagan";  // Create new properties by assignment.
+        book.contents = {};        // {} is an empty object with no properties.
+        
+        // Conditionally access properties with ?. (ES2020):
+        book.contents?.ch01?.sect1 // => undefined: book.contents has no ch01 property.
+        
+        // JavaScript also supports arrays (numerically indexed lists) of values:
+        let primes = [2, 3, 5, 7]; // An array of 4 values, delimited with [ and ].
+        primes[0]                  // => 2: the first element (index 0) of the array.
+        primes.length              // => 4: how many elements in the array.
+        primes[primes.length-1]    // => 7: the last element of the array.
+        primes[4] = 9;             // Add a new element by assignment.
+        primes[4] = 11;            // Or alter an existing element by assignment.
+        let empty = [];            // [] is an empty array with no elements.
+        empty.length               // => 0
+        
+        // Arrays and objects can hold other arrays and objects:
+        let points = [             // An array with 2 elements.
+            {x: 0, y: 0},          // Each element is an object.
+            {x: 1, y: 1}
+        ];
+        let data = {                 // An object with 2 properties
+            trial1: [[1,2], [3,4]],  // The value of each property is an array.
+            trial2: [[2,3], [4,5]]   // The elements of the arrays are arrays.
+        };
+        // COMMENT SYNTAX IN CODE EXAMPLES
+        // You may have noticed in the preceding code that some of the comments begin with an arrow (=>). These show the value produced by the code before the comment and are my attempt to emulate an interactive JavaScript environment like a web browser console in a printed book.
+        
+        // Those // => comments also serve as an assertion, and I’ve written a tool that tests the code and verifies that it produces the value specified in the comment. This should help, I hope, to reduce errors in the book.
+        
+        // There are two related styles of comment/assertion. If you see a comment of the form // a == 42, it means that after the code before the comment runs, the variable a will have the value 42. If you see a comment of the form // !, it means that the code on the line before the comment throws an exception (and the rest of the comment after the exclamation mark usually explains what kind of exception is thrown).
+        
+        // You’ll see these comments used throughout the book.
+        
+        // The syntax illustrated here for listing array elements within square braces or mapping object property names to property values inside curly braces is known as an initializer expression, and it is just one of the topics of Chapter 4. An expression is a phrase of JavaScript that can be evaluated to produce a value. For example, the use of . and [] to refer to the value of an object property or array element is an expression.
+        
+        // One of the most common ways to form expressions in JavaScript is to use operators:
+        
+        // Operators act on values (the operands) to produce a new value.
+        // Arithmetic operators are some of the simplest:
+        3 + 2                      // => 5: addition
+        3 - 2                      // => 1: subtraction
+        3 * 2                      // => 6: multiplication
+        3 / 2                      // => 1.5: division
+        points[1].x - points[0].x  // => 1: more complicated operands also work
+        "3" + "2"                  // => "32": + adds numbers, concatenates strings
+        
+        // JavaScript defines some shorthand arithmetic operators
+        let count = 0;             // Define a variable
+        count++;                   // Increment the variable
+        count--;                   // Decrement the variable
+        count += 2;                // Add 2: same as count = count + 2;
+        count *= 3;                // Multiply by 3: same as count = count * 3;
+        count                      // => 6: variable names are expressions, too.
+        
+        // Equality and relational operators test whether two values are equal,
+        // unequal, less than, greater than, and so on. They evaluate to true or false.
+        let x = 2, y = 3;          // These = signs are assignment, not equality tests
+        x === y                    // => false: equality
+        x !== y                    // => true: inequality
+        x < y                      // => true: less-than
+        x <= y                     // => true: less-than or equal
+        x > y                      // => false: greater-than
+        x >= y                     // => false: greater-than or equal
+        "two" === "three"          // => false: the two strings are different
+        "two" > "three"            // => true: "tw" is alphabetically greater than "th"
+        false === (x > y)          // => true: false is equal to false
+        
+        // Logical operators combine or invert boolean values
+        (x === 2) && (y === 3)     // => true: both comparisons are true. && is AND
+        (x > 3) || (y < 3)         // => false: neither comparison is true. || is OR
+        !(x === y)                 // => true: ! inverts a boolean value
+        // If JavaScript expressions are like phrases, then JavaScript statements are like full sentences. Statements are the topic of Chapter 5. Roughly, an expression is something that computes a value but doesn’t do anything: it doesn’t alter the program state in any way. Statements, on the other hand, don’t have a value, but they do alter the state. You’ve seen variable declarations and assignment statements above. The other broad category of statement is control structures, such as conditionals and loops. You’ll see examples below, after we cover functions.
+        
+        // A function is a named and parameterized block of JavaScript code that you define once, and can then invoke over and over again. Functions aren’t covered formally until Chapter 8, but like objects and arrays, you’ll see them many times before you get to that chapter. Here are some simple examples:
+        
+        // Functions are parameterized blocks of JavaScript code that we can invoke.
+        function plus1(x) {        // Define a function named "plus1" with parameter "x"
+            return x + 1;          // Return a value one larger than the value passed in
+        }                          // Functions are enclosed in curly braces
+        
+        plus1(y)                   // => 4: y is 3, so this invocation returns 3+1
+        
+        let square = function(x) { // Functions are values and can be assigned to vars
+            return x * x;          // Compute the function's value
+        };                         // Semicolon marks the end of the assignment.
+        
+        square(plus1(y))           // => 16: invoke two functions in one expression
+        // In ES6 and later, there is a shorthand syntax for defining functions. This concise syntax uses => to separate the argument list from the function body, so functions defined this way are known as arrow functions. Arrow functions are most commonly used when you want to pass an unnamed function as an argument to another function. The preceding code looks like this when rewritten to use arrow functions:
+        
+        const plus1 = x => x + 1;   // The input x maps to the output x + 1
+        const square = x => x * x;  // The input x maps to the output x * x
+        plus1(y)                    // => 4: function invocation is the same
+        square(plus1(y))            // => 16
+        // When we use functions with objects, we get methods:
+        
+        // When functions are assigned to the properties of an object, we call
+        // them "methods."  All JavaScript objects (including arrays) have methods:
+        let a = [];                // Create an empty array
+        a.push(1,2,3);             // The push() method adds elements to an array
+        a.reverse();               // Another method: reverse the order of elements
+        
+        // We can define our own methods, too. The "this" keyword refers to the object
+        // on which the method is defined: in this case, the points array from earlier.
+        points.dist = function() { // Define a method to compute distance between points
+            let p1 = this[0];      // First element of array we're invoked on
+            let p2 = this[1];      // Second element of the "this" object
+            let a = p2.x-p1.x;     // Difference in x coordinates
+            let b = p2.y-p1.y;     // Difference in y coordinates
+            return Math.sqrt(a*a + // The Pythagorean theorem
+                             b*b); // Math.sqrt() computes the square root
+        };
+        points.dist()              // => Math.sqrt(2): distance between our 2 points
+        // Now, as promised, here are some functions whose bodies demonstrate common JavaScript control structure statements:
+        
+        // JavaScript statements include conditionals and loops using the syntax
+        // of C, C++, Java, and other languages.
+        function abs(x) {          // A function to compute the absolute value.
+            if (x >= 0) {          // The if statement...
+                return x;          // executes this code if the comparison is true.
+            }                      // This is the end of the if clause.
+            else {                 // The optional else clause executes its code if
+                return -x;         // the comparison is false.
+            }                      // Curly braces optional when 1 statement per clause.
+        }                          // Note return statements nested inside if/else.
+        abs(-10) === abs(10)       // => true
+        
+        function sum(array) {      // Compute the sum of the elements of an array
+            let sum = 0;           // Start with an initial sum of 0.
+            for(let x of array) {  // Loop over array, assigning each element to x.
+                sum += x;          // Add the element value to the sum.
+            }                      // This is the end of the loop.
+            return sum;            // Return the sum.
         }
-        else {
-            return this.defaultValue;     // Otherwise return the default value
+        sum(primes)                // => 28: sum of the first 5 primes 2+3+5+7+11
+        
+        function factorial(n) {    // A function to compute factorials
+            let product = 1;       // Start with a product of 1
+            while(n > 1) {         // Repeat statements in {} while expr in () is true
+                product *= n;      // Shortcut for product = product * n;
+                n--;               // Shortcut for n = n - 1
+            }                      // End of loop
+            return product;        // Return the product
         }
-    }
-}
-
-// This class computes and displays letter frequency histograms
-class Histogram {
-    constructor() {
-        this.letterCounts = new DefaultMap(0);  // Map from letters to counts
-        this.totalLetters = 0;                  // How many letters in all
-    }
-
-    // This function updates the histogram with the letters of text.
-    add(text) {
-        // Remove whitespace from the text, and convert to upper case
-        text = text.replace(/\s/g, "").toUpperCase();
-
-        // Now loop through the characters of the text
-        for(let character of text) {
-            let count = this.letterCounts.get(character); // Get old count
-            this.letterCounts.set(character, count+1);    // Increment it
-            this.totalLetters++;
+        factorial(4)               // => 24: 1*4*3*2
+        
+        function factorial2(n) {   // Another version using a different loop
+            let i, product = 1;    // Start with 1
+            for(i=2; i <= n; i++)  // Automatically increment i from 2 up to n
+                product *= i;      // Do this each time. {} not needed for 1-line loops
+            return product;        // Return the factorial
         }
-    }
-
-    // Convert the histogram to a string that displays an ASCII graphic
-    toString() {
-        // Convert the Map to an array of [key,value] arrays
-        let entries = [...this.letterCounts];
-
-        // Sort the array by count, then alphabetically
-        entries.sort((a,b) => {              // A function to define sort order.
-            if (a[1] === b[1]) {             // If the counts are the same
-                return a[0] < b[0] ? -1 : 1; // sort alphabetically.
-            } else {                         // If the counts differ
-                return b[1] - a[1];          // sort by largest count.
+        factorial2(5)              // => 120: 1*2*3*4*5
+        // JavaScript supports an object-oriented programming style, but it is significantly different than “classical” object-oriented programming languages. Chapter 9 covers object-oriented programming in JavaScript in detail, with lots of examples. Here is a very simple example that demonstrates how to define a JavaScript class to represent 2D geometric points. Objects that are instances of this class have a single method, named distance(), that computes the distance of the point from the origin:
+        
+        class Point {              // By convention, class names are capitalized.
+            constructor(x, y) {    // Constructor function to initialize new instances.
+                this.x = x;        // This keyword is the new object being initialized.
+                this.y = y;        // Store function arguments as object properties.
+            }                      // No return is necessary in constructor functions.
+        
+            distance() {           // Method to compute distance from origin to point.
+                return Math.sqrt(  // Return the square root of x² + y².
+                    this.x * this.x +  // this refers to the Point object on which
+                    this.y * this.y    // the distance method is invoked.
+                );
             }
-        });
-
-        // Convert the counts to percentages
-        for(let entry of entries) {
-            entry[1] = entry[1] / this.totalLetters*100;
         }
-
-        // Drop any entries less than 1%
-        entries = entries.filter(entry => entry[1] >= 1);
-
-        // Now convert each entry to a line of text
-        let lines = entries.map(
-            ([l,n]) => `${l}: ${"#".repeat(Math.round(n))} ${n.toFixed(2)}%`
-        );
-
-        // And return the concatenated lines, separated by newline characters.
-        return lines.join("\n");
+        
+        // Use the Point() constructor function with "new" to create Point objects
+        let p = new Point(1, 1);   // The geometric point (1,1).
+        
+        // Now use a method of the Point object p
+        p.distance()               // => Math.SQRT2
+        // This introductory tour of JavaScript’s fundamental syntax and capabilities ends here, but the book continues with self-contained chapters that cover additional features of the language:
+        
+        /* Chapter 10, Modules
+        Shows how JavaScript code in one file or script can use JavaScript functions and classes defined in other files or scripts.
+        
+        Chapter 11, The JavaScript Standard Library
+        Covers the built-in functions and classes that are available to all JavaScript programs. This includes important data stuctures like maps and sets, a regular expression class for textual pattern matching, functions for serializing JavaScript data structures, and much more.
+        
+        Chapter 12, Iterators and Generators
+        Explains how the for/of loop works and how you can make your own classes iterable with for/of. It also covers generator functions and the yield statement.
+        
+        Chapter 13, Asynchronous JavaScript
+        This chapter is an in-depth exploration of asynchronous programming in JavaScript, covering callbacks and events, Promise-based APIs, and the async and await keywords. Although the core JavaScript language is not asynchronous, asynchronous APIs are the default in both web browsers and Node, and this chapter explains the techniques for working with those APIs.
+        
+        Chapter 14, Metaprogramming
+        Introduces a number of advanced features of JavaScript that may be of interest to programmers writing libraries of code for other JavaScript programmers to use.
+        
+        Chapter 15, JavaScript in Web Browsers
+        Introduces the web browser host environment, explains how web browsers execute JavaScript code, and covers the most important of the many APIs defined by web browsers. This is by far the longest chapter in the book.
+        
+        Chapter 16, Server-Side JavaScript with Node
+        Introduces the Node host environment, covering the fundamental programming model and the data structures and APIs that are most important to understand.
+        
+        Chapter 17, JavaScript Tools and Extensions
+        Covers tools and language extensions that are worth knowing about because they are widely used and may make you a more productive programmer.*/
     }
+    {   /* 1.4 Example: Character Frequency Histograms
+        This chapter concludes with a short but nontrivial JavaScript program. Example 1-1 is a Node program that reads text from standard input, computes a character frequency histogram from that text, and then prints out the histogram. You could invoke the program like this to analyze the character frequency of its own source code:
+        
+        $ node charfreq.js < charfreq.js
+        T: ########### 11.22%
+        E: ########## 10.15%
+        R: ####### 6.68%
+        S: ###### 6.44%
+        A: ###### 6.16%
+        N: ###### 5.81%
+        O: ##### 5.45%
+        I: ##### 4.54%
+        H: #### 4.07%
+        C: ### 3.36%
+        L: ### 3.20%
+        U: ### 3.08%
+        /: ### 2.88%
+        This example uses a number of advanced JavaScript features and is intended to demonstrate what real-world JavaScript programs can look like. You should not expect to understand all of the code yet, but be assured that all of it will be explained in the chapters that follow.
+        
+        Example 1-1. Computing character frequency histograms with JavaScript
+        
+         * This Node program reads text from standard input, computes the frequency
+         * of each letter in that text, and displays a histogram of the most
+         * frequently used characters. It requires Node 12 or higher to run.
+         *
+         * In a Unix-type environment you can invoke the program like this:
+         *    node charfreq.js < corpus.txt
+         */
+        
+        // This class extends Map so that the get() method returns the specified
+        // value instead of null when the key is not in the map
+        class DefaultMap extends Map {
+            constructor(defaultValue) {
+                super();                          // Invoke superclass constructor
+                this.defaultValue = defaultValue; // Remember the default value
+            }
+        
+            get(key) {
+                if (this.has(key)) {              // If the key is already in the map
+                    return super.get(key);        // return its value from superclass.
+                }
+                else {
+                    return this.defaultValue;     // Otherwise return the default value
+                }
+            }
+        }
+        
+        // This class computes and displays letter frequency histograms
+        class Histogram {
+            constructor() {
+                this.letterCounts = new DefaultMap(0);  // Map from letters to counts
+                this.totalLetters = 0;                  // How many letters in all
+            }
+        
+            // This function updates the histogram with the letters of text.
+            add(text) {
+                // Remove whitespace from the text, and convert to upper case
+                text = text.replace(/\s/g, "").toUpperCase();
+        
+                // Now loop through the characters of the text
+                for(let character of text) {
+                    let count = this.letterCounts.get(character); // Get old count
+                    this.letterCounts.set(character, count+1);    // Increment it
+                    this.totalLetters++;
+                }
+            }
+        
+            // Convert the histogram to a string that displays an ASCII graphic
+            toString() {
+                // Convert the Map to an array of [key,value] arrays
+                let entries = [...this.letterCounts];
+        
+                // Sort the array by count, then alphabetically
+                entries.sort((a,b) => {              // A function to define sort order.
+                    if (a[1] === b[1]) {             // If the counts are the same
+                        return a[0] < b[0] ? -1 : 1; // sort alphabetically.
+                    } else {                         // If the counts differ
+                        return b[1] - a[1];          // sort by largest count.
+                    }
+                });
+        
+                // Convert the counts to percentages
+                for(let entry of entries) {
+                    entry[1] = entry[1] / this.totalLetters*100;
+                }
+        
+                // Drop any entries less than 1%
+                entries = entries.filter(entry => entry[1] >= 1);
+        
+                // Now convert each entry to a line of text
+                let lines = entries.map(
+                    ([l,n]) => `${l}: ${"#".repeat(Math.round(n))} ${n.toFixed(2)}%`
+                );
+        
+                // And return the concatenated lines, separated by newline characters.
+                return lines.join("\n");
+            }
+        }
+        
+        // This async (Promise-returning) function creates a Histogram object,
+        // asynchronously reads chunks of text from standard input, and adds those chunks to
+        // the histogram. When it reaches the end of the stream, it returns this histogram
+        async function histogramFromStdin() {
+            process.stdin.setEncoding("utf-8"); // Read Unicode strings, not bytes
+            let histogram = new Histogram();
+            for await (let chunk of process.stdin) {
+                histogram.add(chunk);
+            }
+            return histogram;
+        }
+        
+        // This one final line of code is the main body of the program.
+        // It makes a Histogram object from standard input, then prints the histogram.
+        histogramFromStdin().then(histogram => { console.log(histogram.toString()); });
+    }
+    {	/* 1.5 Summary
+		This book explains JavaScript from the bottom up.
+		This means that we start with low-level details like comments, identifiers, variables, and types; then build to expressions, statements, objects, and functions; and then cover high-level language abstractions like classes and modules. I take the word definitive in the title of this book seriously, and the coming chapters explain the language at a level of detail that may feel off-putting at first. True mastery of JavaScript requires an understanding of the details, however, and I hope that you will make time to read this book cover to cover. But please don’t feel that you need to do that on your first reading. If you find yourself feeling bogged down in a section, simply skip to the next. You can come back and master the details once you have a working knowledge of the language as a whole.*/
+	}
 }
 
-// This async (Promise-returning) function creates a Histogram object,
-// asynchronously reads chunks of text from standard input, and adds those chunks to
-// the histogram. When it reaches the end of the stream, it returns this histogram
-async function histogramFromStdin() {
-    process.stdin.setEncoding("utf-8"); // Read Unicode strings, not bytes
-    let histogram = new Histogram();
-    for await (let chunk of process.stdin) {
-        histogram.add(chunk);
-    }
-    return histogram;
-}
-
-// This one final line of code is the main body of the program.
-// It makes a Histogram object from standard input, then prints the histogram.
-histogramFromStdin().then(histogram => { console.log(histogram.toString()); });
-/*1.5 Summary
-This book explains JavaScript from the bottom up. This means that we start with low-level details like comments, identifiers, variables, and types; then build to expressions, statements, objects, and functions; and then cover high-level language abstractions like classes and modules. I take the word definitive in the title of this book seriously, and the coming chapters explain the language at a level of detail that may feel off-putting at first. True mastery of JavaScript requires an understanding of the details, however, and I hope that you will make time to read this book cover to cover. But please don’t feel that you need to do that on your first reading. If you find yourself feeling bogged down in a section, simply skip to the next. You can come back and master the details once you have a working knowledge of the language as a whole.
-
-Chapter 2. Lexical Structure
+{   /* Chapter 2. Lexical Structure
 The lexical structure of a programming language is the set of elementary rules that specifies how you write programs in that language. It is the lowest-level syntax of a language: it specifies what variable names look like, the delimiter characters for comments, and how one program statement is separated from the next, for example. This short chapter documents the lexical structure of JavaScript. It covers:
 
 Case sensitivity, spaces, and line breaks
@@ -1148,79 +1133,72 @@ n + " objects"      // => "NaN objects": NaN converts to string "NaN"
 // Table 3-2 summarizes how values convert from one type to another in JavaScript. Bold entries in the table highlight conversions that you may find surprising. Empty cells indicate that no conversion is necessary and none is performed.
 
 // Table 3-2. JavaScript type conversions
-// Value       to String       to Number       to Boolean
-// undefined   "undefined"       NaN              false
-// null        "null"            0                false
-// true        "true"            1
-// false       "false"           0            
-// "" (empty string)             0                false
-// "1.2" (nonempty, numeric)     1.2              true
-// "one" (nonempty, non-numeric) NaN              true
-// 0           "0"                                false
-// -0          "0"                                false
-// 1           "1"                                true
-// Infinity    "Infinity"                         true
-// -Infinity   "-Infinity"                        true
-// NaN         "NaN"                              false
-//{} (object)  see §3.9.3      see §3.9.3         true
-// [] (empty array)  ""          0                true
-// [9] (1 element)   "9"         9                true
-// ['a'] (any other array) use join() method
+// Value                           to String       to Number       to Boolean
+// undefined                       "undefined"       NaN              false
+// null                            "null"            0                false
+// true                            "true"            1
+// false                           "false"           0            
+// "" (empty string)                                 0                false
+// "1.2" (nonempty, numeric)                         1.2              true
+// "one" (nonempty, non-numeric)                     NaN              true
+// 0                               "0"                                false
+// -0                              "0"                                false
+// 1                               "1"                                true
+// Infinity                        "Infinity"                         true
+// -Infinity                       "-Infinity"                        true
+// NaN                             "NaN"                              false
+// {} (any object)                 see §3.9.3        see §3.9.3       true
+// [] (empty array)                ""                0                true
+// [9] (one numeric element)       "9"               9                true
+// ['a'] (any other array) use join() method         NaN              true
+// function(){} (any function)     see §3.9.3        NaN              true
 
-NaN
+// The primitive-to-primitive conversions shown in the table are relatively straightforward. Conversion to boolean was already discussed in §3.4. Conversion to strings is well defined for all primitive values. Conversion to numbers is just a little trickier. Strings that can be parsed as numbers convert to those numbers. Leading and trailing spaces are allowed, but any leading or trailing nonspace characters that are not part of a numeric literal cause the string-to-number conversion to produce NaN. Some numeric conversions may seem surprising: true converts to 1, and false and the empty string convert to 0.
 
-true
+// Object-to-primitive conversion is somewhat more complicated, and it is the subject of §3.9.3.
 
-function(){} (any function)
-
-see §3.9.3
-
-NaN
-
-true
-
-The primitive-to-primitive conversions shown in the table are relatively straightforward. Conversion to boolean was already discussed in §3.4. Conversion to strings is well defined for all primitive values. Conversion to numbers is just a little trickier. Strings that can be parsed as numbers convert to those numbers. Leading and trailing spaces are allowed, but any leading or trailing nonspace characters that are not part of a numeric literal cause the string-to-number conversion to produce NaN. Some numeric conversions may seem surprising: true converts to 1, and false and the empty string convert to 0.
-
-Object-to-primitive conversion is somewhat more complicated, and it is the subject of §3.9.3.
-
-3.9.1 Conversions and Equality
-JavaScript has two operators that test whether two values are equal. The “strict equality operator,” ===, does not consider its operands to be equal if they are not of the same type, and this is almost always the right operator to use when coding. But because JavaScript is so flexible with type conversions, it also defines the == operator with a flexible definition of equality. All of the following comparisons are true, for example:
+// 3.9.1 Conversions and Equality
+// JavaScript has two operators that test whether two values are equal. The “strict equality operator,” ===, does not consider its operands to be equal if they are not of the same type, and this is almost always the right operator to use when coding. But because JavaScript is so flexible with type conversions, it also defines the == operator with a flexible definition of equality. All of the following comparisons are true, for example:
 
 null == undefined // => true: These two values are treated as equal.
 "0" == 0          // => true: String converts to a number before comparing.
 0 == false        // => true: Boolean converts to number before comparing.
 "0" == false      // => true: Both operands convert to 0 before comparing!
-§4.9.1 explains exactly what conversions are performed by the == operator in order to determine whether two values should be considered equal.
 
-Keep in mind that convertibility of one value to another does not imply equality of those two values. If undefined is used where a boolean value is expected, for example, it will convert to false. But this does not mean that undefined == false. JavaScript operators and statements expect values of various types and perform conversions to those types. The if statement converts undefined to false, but the == operator never attempts to convert its operands to booleans.
+// §4.9.1 explains exactly what conversions are performed by the == operator in order to determine whether two values should be considered equal.
 
-3.9.2 Explicit Conversions
-Although JavaScript performs many type conversions automatically, you may sometimes need to perform an explicit conversion, or you may prefer to make the conversions explicit to keep your code clearer.
+// Keep in mind that convertibility of one value to another does not imply equality of those two values. If undefined is used where a boolean value is expected, for example, it will convert to false. But this does not mean that undefined == false. JavaScript operators and statements expect values of various types and perform conversions to those types. The if statement converts undefined to false, but the == operator never attempts to convert its operands to booleans.
 
-The simplest way to perform an explicit type conversion is to use the Boolean(), Number(), and String() functions:
+// 3.9.2 Explicit Conversions
+// Although JavaScript performs many type conversions automatically, you may sometimes need to perform an explicit conversion, or you may prefer to make the conversions explicit to keep your code clearer.
+
+// The simplest way to perform an explicit type conversion is to use the Boolean(), Number(), and String() functions:
 
 Number("3")    // => 3
 String(false)  // => "false":  Or use false.toString()
 Boolean([])    // => true
-Any value other than null or undefined has a toString() method, and the result of this method is usually the same as that returned by the String() function.
 
-As an aside, note that the Boolean(), Number(), and String() functions can also be invoked—with new—as constructor. If you use them this way, you’ll get a “wrapper” object that behaves just like a primitive boolean, number, or string value. These wrapper objects are a historical leftover from the earliest days of JavaScript, and there is never really any good reason to use them.
+// Any value other than null or undefined has a toString() method, and the result of this method is usually the same as that returned by the String() function.
 
-Certain JavaScript operators perform implicit type conversions and are sometimes used explicitly for the purpose of type conversion. If one operand of the + operator is a string, it converts the other one to a string. The unary + operator converts its operand to a number. And the unary ! operator converts its operand to a boolean and negates it. These facts lead to the following type conversion idioms that you may see in some code:
+// As an aside, note that the Boolean(), Number(), and String() functions can also be invoked—with new—as constructor. If you use them this way, you’ll get a “wrapper” object that behaves just like a primitive boolean, number, or string value. These wrapper objects are a historical leftover from the earliest days of JavaScript, and there is never really any good reason to use them.
+
+// Certain JavaScript operators perform implicit type conversions and are sometimes used explicitly for the purpose of type conversion. If one operand of the + operator is a string, it converts the other one to a string. The unary + operator converts its operand to a number. And the unary ! operator converts its operand to a boolean and negates it. These facts lead to the following type conversion idioms that you may see in some code:
 
 x + ""   // => String(x)
 +x       // => Number(x)
 x-0      // => Number(x)
 !!x      // => Boolean(x): Note double !
-Formatting and parsing numbers are common tasks in computer programs, and JavaScript has specialized functions and methods that provide more precise control over number-to-string and string-to-number conversions.
 
-The toString() method defined by the Number class accepts an optional argument that specifies a radix, or base, for the conversion. If you do not specify the argument, the conversion is done in base 10. However, you can also convert numbers in other bases (between 2 and 36). For example:
+// Formatting and parsing numbers are common tasks in computer programs, and JavaScript has specialized functions and methods that provide more precise control over number-to-string and string-to-number conversions.
+
+// The toString() method defined by the Number class accepts an optional argument that specifies a radix, or base, for the conversion. If you do not specify the argument, the conversion is done in base 10. However, you can also convert numbers in other bases (between 2 and 36). For example:
 
 let n = 17;
 let binary = "0b" + n.toString(2);  // binary == "0b10001"
 let octal = "0o" + n.toString(8);   // octal == "0o21"
 let hex = "0x" + n.toString(16);    // hex == "0x11"
-When working with financial or scientific data, you may want to convert numbers to strings in ways that give you control over the number of decimal places or the number of significant digits in the output, or you may want to control whether exponential notation is used. The Number class defines three methods for these kinds of number-to-string conversions. toFixed() converts a number to a string with a specified number of digits after the decimal point. It never uses exponential notation. toExponential() converts a number to a string using exponential notation, with one digit before the decimal point and a specified number of digits after the decimal point (which means that the number of significant digits is one larger than the value you specify). toPrecision() converts a number to a string with the number of significant digits you specify. It uses exponential notation if the number of significant digits is not large enough to display the entire integer portion of the number. Note that all three methods round the trailing digits or pad with zeros as appropriate. Consider the following examples:
+
+// When working with financial or scientific data, you may want to convert numbers to strings in ways that give you control over the number of decimal places or the number of significant digits in the output, or you may want to control whether exponential notation is used. The Number class defines three methods for these kinds of number-to-string conversions. toFixed() converts a number to a string with a specified number of digits after the decimal point. It never uses exponential notation. toExponential() converts a number to a string using exponential notation, with one digit before the decimal point and a specified number of digits after the decimal point (which means that the number of significant digits is one larger than the value you specify). toPrecision() converts a number to a string with the number of significant digits you specify. It uses exponential notation if the number of significant digits is not large enough to display the entire integer portion of the number. Note that all three methods round the trailing digits or pad with zeros as appropriate. Consider the following examples:
 
 let n = 123456.789;
 n.toFixed(0)         // => "123457"
@@ -1231,9 +1209,10 @@ n.toExponential(3)   // => "1.235e+5"
 n.toPrecision(4)     // => "1.235e+5"
 n.toPrecision(7)     // => "123456.8"
 n.toPrecision(10)    // => "123456.7890"
-In addition to the number-formatting methods shown here, the Intl.NumberFormat class defines a more general, internationalized number-formatting method. See §11.7.1 for details.
 
-If you pass a string to the Number() conversion function, it attempts to parse that string as an integer or floating-point literal. That function only works for base-10 integers and does not allow trailing characters that are not part of the literal. The parseInt() and parseFloat() functions (these are global functions, not methods of any class) are more flexible. parseInt() parses only integers, while parseFloat() parses both integers and floating-point numbers. If a string begins with “0x” or “0X”, parseInt() interprets it as a hexadecimal number. Both parseInt() and parseFloat() skip leading whitespace, parse as many numeric characters as they can, and ignore anything that follows. If the first nonspace character is not part of a valid numeric literal, they return NaN:
+// In addition to the number-formatting methods shown here, the Intl.NumberFormat class defines a more general, internationalized number-formatting method. See §11.7.1 for details.
+
+// If you pass a string to the Number() conversion function, it attempts to parse that string as an integer or floating-point literal. That function only works for base-10 integers and does not allow trailing characters that are not part of the literal. The parseInt() and parseFloat() functions (these are global functions, not methods of any class) are more flexible. parseInt() parses only integers, while parseFloat() parses both integers and floating-point numbers. If a string begins with “0x” or “0X”, parseInt() interprets it as a hexadecimal number. Both parseInt() and parseFloat() skip leading whitespace, parse as many numeric characters as they can, and ignore anything that follows. If the first nonspace character is not part of a valid numeric literal, they return NaN:
 
 parseInt("3 blind mice")     // => 3
 parseFloat(" 3.14 meters")   // => 3.14
@@ -1245,15 +1224,17 @@ parseFloat(".1")             // => 0.1
 parseInt("0.1")              // => 0
 parseInt(".1")               // => NaN: integers can't start with "."
 parseFloat("$72.47")         // => NaN: numbers can't start with "$"
-parseInt() accepts an optional second argument specifying the radix (base) of the number to be parsed. Legal values are between 2 and 36. For example:
+
+// parseInt() accepts an optional second argument specifying the radix (base) of the number to be parsed. Legal values are between 2 and 36. For example:
 
 parseInt("11", 2)     // => 3: (1*2 + 1)
 parseInt("ff", 16)    // => 255: (15*16 + 15)
 parseInt("zz", 36)    // => 1295: (35*36 + 35)
 parseInt("077", 8)    // => 63: (7*8 + 7)
 parseInt("077", 10)   // => 77: (7*10 + 7)
-3.9.3 Object to Primitive Conversions
-The previous sections have explained how you can explicitly convert values of one type to another type and have explained JavaScript’s implicit conversions of values from one primitive type to another primitive type. This section covers the complicated rules that JavaScript uses to convert objects to primitive values. It is long and obscure, and if this is your first reading of this chapter, you should feel free to skip ahead to §3.10.
+
+// 3.9.3 Object to Primitive Conversions
+/* The previous sections have explained how you can explicitly convert values of one type to another type and have explained JavaScript’s implicit conversions of values from one primitive type to another primitive type. This section covers the complicated rules that JavaScript uses to convert objects to primitive values. It is long and obscure, and if this is your first reading of this chapter, you should feel free to skip ahead to §3.10.
 
 One reason for the complexity of JavaScript’s object-to-primitive conversions is that some types of objects have more than one primitive representation. Date objects, for example, can be represented as strings or as numeric timestamps. The JavaScript specification defines three fundamental algorithms for converting objects to primitive values:
 
@@ -1293,23 +1274,26 @@ Finally, the relational operators <, <=, >, and >= compare the order of their op
 Note that the numeric representation of Date objects is meaningfully comparable with < and >, but the string representation is not. For Date objects, the no-preference algorithm converts to a string, so the fact that JavaScript uses the prefer-number algorithm for these operators means that we can use them to compare the order of two Date objects.
 
 The toString() and valueOf() methods
-All objects inherit two conversion methods that are used by object-to-primitive conversions, and before we can explain the prefer-string, prefer-number, and no-preference conversion algorithms, we have to explain these two methods.
+All objects inherit two conversion methods that are used by object-to-primitive conversions, and before we can explain the prefer-string, prefer-number, and no-preference conversion algorithms, we have to explain these two methods.*/
 
-The first method is toString(), and its job is to return a string representation of the object. The default toString() method does not return a very interesting value (though we’ll find it useful in §14.4.3):
+// The first method is toString(), and its job is to return a string representation of the object. The default toString() method does not return a very interesting value (though we’ll find it useful in §14.4.3):
 
 ({x: 1, y: 2}).toString()    // => "[object Object]"
-Many classes define more specific versions of the toString() method. The toString() method of the Array class, for example, converts each array element to a string and joins the resulting strings together with commas in between. The toString() method of the Function class converts user-defined functions to strings of JavaScript source code. The Date class defines a toString() method that returns a human-readable (and JavaScript-parsable) date and time string. The RegExp class defines a toString() method that converts RegExp objects to a string that looks like a RegExp literal:
+
+// Many classes define more specific versions of the toString() method. The toString() method of the Array class, for example, converts each array element to a string and joins the resulting strings together with commas in between. The toString() method of the Function class converts user-defined functions to strings of JavaScript source code. The Date class defines a toString() method that returns a human-readable (and JavaScript-parsable) date and time string. The RegExp class defines a toString() method that converts RegExp objects to a string that looks like a RegExp literal:
 
 [1,2,3].toString()                  // => "1,2,3"
 (function(x) { f(x); }).toString()  // => "function(x) { f(x); }"
-/\d+/g.toString()                   // => "/\\d+/g"
+/\d+/g.toString()                   /// => "/\\d+/g"
 let d = new Date(2020,0,1);
 d.toString()  // => "Wed Jan 01 2020 00:00:00 GMT-0800 (Pacific Standard Time)"
-The other object conversion function is called valueOf(). The job of this method is less well defined: it is supposed to convert an object to a primitive value that represents the object, if any such primitive value exists. Objects are compound values, and most objects cannot really be represented by a single primitive value, so the default valueOf() method simply returns the object itself rather than returning a primitive. Wrapper classes such as String, Number, and Boolean define valueOf() methods that simply return the wrapped primitive value. Arrays, functions, and regular expressions simply inherit the default method. Calling valueOf() for instances of these types simply returns the object itself. The Date class defines a valueOf() method that returns the date in its internal representation: the number of milliseconds since January 1, 1970:
+
+// The other object conversion function is called valueOf(). The job of this method is less well defined: it is supposed to convert an object to a primitive value that represents the object, if any such primitive value exists. Objects are compound values, and most objects cannot really be represented by a single primitive value, so the default valueOf() method simply returns the object itself rather than returning a primitive. Wrapper classes such as String, Number, and Boolean define valueOf() methods that simply return the wrapped primitive value. Arrays, functions, and regular expressions simply inherit the default method. Calling valueOf() for instances of these types simply returns the object itself. The Date class defines a valueOf() method that returns the date in its internal representation: the number of milliseconds since January 1, 1970:
 
 let d = new Date(2010, 0, 1);   // January 1, 2010, (Pacific time)
 d.valueOf()                     // => 1262332800000
-Object-to-primitive conversion algorithms
+
+/* Object-to-primitive conversion algorithms
 With the toString() and valueOf() methods explained, we can now explain approximately how the three object-to-primitive algorithms work (the complete details are deferred until §14.4.7):
 
 The prefer-string algorithm first tries the toString() method. If the method is defined and returns a primitive value, then JavaScript uses that primitive value (even if it is not a string!). If toString() does not exist or if it returns an object, then JavaScript tries the valueOf() method. If that method exists and returns a primitive value, then JavaScript uses that value. Otherwise, the conversion fails with a TypeError.
@@ -1318,64 +1302,71 @@ The prefer-number algorithm works like the prefer-string algorithm, except that 
 
 The no-preference algorithm depends on the class of the object being converted. If the object is a Date object, then JavaScript uses the prefer-string algorithm. For any other object, JavaScript uses the prefer-number algorithm.
 
-The rules described here are true for all built-in JavaScript types and are the default rules for any classes you define yourself. §14.4.7 explains how you can define your own object-to-primitive conversion algorithms for the classes you define.
+The rules described here are true for all built-in JavaScript types and are the default rules for any classes you define yourself. §14.4.7 explains how you can define your own object-to-primitive conversion algorithms for the classes you define.*/
 
-Before we leave this topic, it is worth noting that the details of the prefer-number conversion explain why empty arrays convert to the number 0 and single-element arrays can also convert to numbers:
+// Before we leave this topic, it is worth noting that the details of the prefer-number conversion explain why empty arrays convert to the number 0 and single-element arrays can also convert to numbers:
 
 Number([])    // => 0: this is unexpected!
 Number([99])  // => 99: really?
-The object-to-number conversion first converts the object to a primitive using the prefer-number algorithm, then converts the resulting primitive value to a number. The prefer-number algorithm tries valueOf() first and then falls back on toString(). But the Array class inherits the default valueOf() method, which does not return a primitive value. So when we try to convert an array to a number, we end up invoking the toString() method of the array. Empty arrays convert to the empty string. And the empty string converts to the number 0. An array with a single element converts to the same string that that one element does. If an array contains a single number, that number is converted to a string, and then back to a number.
+
+/* The object-to-number conversion first converts the object to a primitive using the prefer-number algorithm, then converts the resulting primitive value to a number. The prefer-number algorithm tries valueOf() first and then falls back on toString(). But the Array class inherits the default valueOf() method, which does not return a primitive value. So when we try to convert an array to a number, we end up invoking the toString() method of the array. Empty arrays convert to the empty string. And the empty string converts to the number 0. An array with a single element converts to the same string that that one element does. If an array contains a single number, that number is converted to a string, and then back to a number.
 
 3.10 Variable Declaration and Assignment
 One of the most fundamental techniques of computer programming is the use of names—or identifiers—to represent values. Binding a name to a value gives us a way to refer to that value and use it in the programs we write. When we do this, we typically say that we are assigning a value to a variable. The term “variable” implies that new values can be assigned: that the value associated with the variable may vary as our program runs. If we permanently assign a value to a name, then we call that name a constant instead of a variable.
 
-Before you can use a variable or constant in a JavaScript program, you must declare it. In ES6 and later, this is done with the let and const keywords, which we explain next. Prior to ES6, variables were declared with var, which is more idiosyncratic and is explained later on in this section.
+Before you can use a variable or constant in a JavaScript program, you must declare it. In ES6 and later, this is done with the let and const keywords, which we explain next. Prior to ES6, variables were declared with var, which is more idiosyncratic and is explained later on in this section.*/
 
-3.10.1 Declarations with let and const
-In modern JavaScript (ES6 and later), variables are declared with the let keyword, like this:
+// 3.10.1 Declarations with let and const
+// In modern JavaScript (ES6 and later), variables are declared with the let keyword, like this:
 
 let i;
 let sum;
-You can also declare multiple variables in a single let statement:
+
+// You can also declare multiple variables in a single let statement:
 
 let i, sum;
-It is a good programming practice to assign an initial value to your variables when you declare them, when this is possible:
+
+// It is a good programming practice to assign an initial value to your variables when you declare them, when this is possible:
 
 let message = "hello";
 let i = 0, j = 0, k = 0;
 let x = 2, y = x*x; // Initializers can use previously declared variables
-If you don’t specify an initial value for a variable with the let statement, the variable is declared, but its value is undefined until your code assigns a value to it.
 
-To declare a constant instead of a variable, use const instead of let. const works just like let except that you must initialize the constant when you declare it:
+// If you don’t specify an initial value for a variable with the let statement, the variable is declared, but its value is undefined until your code assigns a value to it.
+
+// To declare a constant instead of a variable, use const instead of let. const works just like let except that you must initialize the constant when you declare it:
 
 const H0 = 74;         // Hubble constant (km/s/Mpc)
 const C = 299792.458;  // Speed of light in a vacuum (km/s)
 const AU = 1.496E8;    // Astronomical Unit: distance to the sun (km)
-As the name implies, constants cannot have their values changed, and any attempt to do so causes a TypeError to be thrown.
+
+/* As the name implies, constants cannot have their values changed, and any attempt to do so causes a TypeError to be thrown.
 
 It is a common (but not universal) convention to declare constants using names with all capital letters such as H0 or HTTP_NOT_FOUND as a way to distinguish them from variables.
 
 WHEN TO USE CONST
 There are two schools of thought about the use of the const keyword. One approach is to use const only for values that are fundamentally unchanging, like the physical constants shown, or program version numbers, or byte sequences used to identify file types, for example. Another approach recognizes that many of the so-called variables in our program don’t actually ever change as our program runs. In this approach, we declare everything with const, and then if we find that we do actually want to allow the value to vary, we switch the declaration to let. This may help prevent bugs by ruling out accidental changes to variables that we did not intend.
 
-In one approach, we use const only for values that must not change. In the other, we use const for any value that does not happen to change. I prefer the former approach in my own code.
+In one approach, we use const only for values that must not change. In the other, we use const for any value that does not happen to change. I prefer the former approach in my own code.*/
 
-In Chapter 5, we’ll learn about the for, for/in, and for/of loop statements in JavaScript. Each of these loops includes a loop variable that gets a new value assigned to it on each iteration of the loop. JavaScript allows us to declare the loop variable as part of the loop syntax itself, and this is another common way to use let:
+// In Chapter 5, we’ll learn about the for, for/in, and for/of loop statements in JavaScript. Each of these loops includes a loop variable that gets a new value assigned to it on each iteration of the loop. JavaScript allows us to declare the loop variable as part of the loop syntax itself, and this is another common way to use let:
 
 for(let i = 0, len = data.length; i < len; i++) console.log(data[i]);
 for(let datum of data) console.log(datum);
 for(let property in object) console.log(property);
-It may seem surprising, but you can also use const to declare the loop “variables” for for/in and for/of loops, as long as the body of the loop does not reassign a new value. In this case, the const declaration is just saying that the value is constant for the duration of one loop iteration:
+
+// It may seem surprising, but you can also use const to declare the loop “variables” for for/in and for/of loops, as long as the body of the loop does not reassign a new value. In this case, the const declaration is just saying that the value is constant for the duration of one loop iteration:
 
 for(const datum of data) console.log(datum);
 for(const property in object) console.log(property);
-Variable and constant scope
+
+/*Variable and constant scope
 The scope of a variable is the region of your program source code in which it is defined. Variables and constants declared with let and const are block scoped. This means that they are only defined within the block of code in which the let or const statement appears. JavaScript class and function definitions are blocks, and so are the bodies of if/else statements, while loops, for loops, and so on. Roughly speaking, if a variable or constant is declared within a set of curly braces, then those curly braces delimit the region of code in which the variable or constant is defined (though of course it is not legal to reference a variable or constant from lines of code that execute before the let or const statement that declares the variable). Variables and constants declared as part of a for, for/in, or for/of loop have the loop body as their scope, even though they technically appear outside of the curly braces.
 
 When a declaration appears at the top level, outside of any code blocks, we say it is a global variable or constant and has global scope. In Node and in client-side JavaScript modules (see Chapter 10), the scope of a global variable is the file that it is defined in. In traditional client-side JavaScript, however, the scope of a global variable is the HTML document in which it is defined. That is: if one <script> declares a global variable or constant, that variable or constant is defined in all of the <script> elements in that document (or at least all of the scripts that execute after the let or const statement executes).
 
 Repeated declarations
-It is a syntax error to use the same name with more than one let or const declaration in the same scope. It is legal (though a practice best avoided) to declare a new variable with the same name in a nested scope:
+It is a syntax error to use the same name with more than one let or const declaration in the same scope. It is legal (though a practice best avoided) to declare a new variable with the same name in a nested scope:*/
 
 const x = 1;        // Declare x as a global constant
 if (x === 1) {
@@ -1384,18 +1375,21 @@ if (x === 1) {
 }
 console.log(x);     // Prints 1: we're back in the global scope now
 let x = 3;          // ERROR! Syntax error trying to re-declare x
-Declarations and types
-If you’re used to statically typed languages such as C or Java, you may think that the primary purpose of variable declarations is to specify the type of values that may be assigned to a variable. But, as you have seen, there is no type associated with JavaScript’s variable declarations.2 A JavaScript variable can hold a value of any type. For example, it is perfectly legal (but generally poor programming style) in JavaScript to assign a number to a variable and then later assign a string to that variable:
+
+/*Declarations and types
+If you’re used to statically typed languages such as C or Java, you may think that the primary purpose of variable declarations is to specify the type of values that may be assigned to a variable. But, as you have seen, there is no type associated with JavaScript’s variable declarations.2 A JavaScript variable can hold a value of any type. For example, it is perfectly legal (but generally poor programming style) in JavaScript to assign a number to a variable and then later assign a string to that variable:*/
 
 let i = 10;
 i = "ten";
-3.10.2 Variable Declarations with var
-In versions of JavaScript before ES6, the only way to declare a variable is with the var keyword, and there is no way to declare constants. The syntax of var is just like the syntax of let:
+
+// 3.10.2 Variable Declarations with var
+// In versions of JavaScript before ES6, the only way to declare a variable is with the var keyword, and there is no way to declare constants. The syntax of var is just like the syntax of let:
 
 var x;
 var data = [], count = data.length;
 for(var i = 0; i < count; i++) console.log(data[i]);
-Although var and let have the same syntax, there are important differences in the way they work:
+
+/* Although var and let have the same syntax, there are important differences in the way they work:
 
 Variables declared with var do not have block scope. Instead, they are scoped to the body of the containing function no matter how deeply nested they are inside that function.
 
@@ -1413,13 +1407,14 @@ Global variables created in this accidental way are like global variables declar
 3.10.3 Destructuring Assignment
 ES6 implements a kind of compound declaration and assignment syntax known as destructuring assignment. In a destructuring assignment, the value on the righthand side of the equals sign is an array or object (a “structured” value), and the lefthand side specifies one or more variable names using a syntax that mimics array and object literal syntax. When a destructuring assignment occurs, one or more values are extracted (“destructured”) from the value on the right and stored into the variables named on the left. Destructuring assignment is perhaps most commonly used to initialize variables as part of a const, let, or var declaration statement, but it can also be done in regular assignment expressions (with variables that have already been declared). And, as we’ll see in §8.3.5, destructuring can also be used when defining the parameters to a function.
 
-Here are simple destructuring assignments using arrays of values:
+Here are simple destructuring assignments using arrays of values: */
 
 let [x,y] = [1,2];  // Same as let x=1, y=2
 [x,y] = [x+1,y+1];  // Same as x = x + 1, y = y + 1
 [x,y] = [y,x];      // Swap the value of the two variables
 [x,y]               // => [3,2]: the incremented and swapped values
-Notice how destructuring assignment makes it easy to work with functions that return arrays of values:
+
+// Notice how destructuring assignment makes it easy to work with functions that return arrays of values:
 
 // Convert [x,y] coordinates to [r,theta] polar coordinates
 function toPolar(x, y) {
@@ -1433,18 +1428,21 @@ function toCartesian(r, theta) {
 
 let [r,theta] = toPolar(1.0, 1.0);  // r == Math.sqrt(2); theta == Math.PI/4
 let [x,y] = toCartesian(r,theta);   // [x, y] == [1.0, 1,0]
-We saw that variables and constants can be declared as part of JavaScript’s various for loops. It is possible to use variable destructuring in this context as well. Here is a code that loops over the name/value pairs of all properties of an object and uses destructuring assignment to convert those pairs from two-element arrays into individual variables:
+
+// We saw that variables and constants can be declared as part of JavaScript’s various for loops. It is possible to use variable destructuring in this context as well. Here is a code that loops over the name/value pairs of all properties of an object and uses destructuring assignment to convert those pairs from two-element arrays into individual variables:
 
 let o = { x: 1, y: 2 }; // The object we'll loop over
 for(const [name, value] of Object.entries(o)) {
     console.log(name, value); // Prints "x 1" and "y 2"
 }
-The number of variables on the left of a destructuring assignment does not have to match the number of array elements on the right. Extra variables on the left are set to undefined, and extra values on the right are ignored. The list of variables on the left can include extra commas to skip certain values on the right:
+
+// The number of variables on the left of a destructuring assignment does not have to match the number of array elements on the right. Extra variables on the left are set to undefined, and extra values on the right are ignored. The list of variables on the left can include extra commas to skip certain values on the right:
 
 let [x,y] = [1];     // x == 1; y == undefined
 [x,y] = [1,2,3];     // x == 1; y == 2
 [,x,,y] = [1,2,3,4]; // x == 2; y == 4
-If you want to collect all unused or remaining values into a single variable when destructuring an array, use three dots (...) before the last variable name on the left-hand side:
+
+// If you want to collect all unused or remaining values into a single variable when destructuring an array, use three dots (...) before the last variable name on the left-hand side:
 
 let [x, ...y] = [1,2,3,4];  // y == [2,3,4]
 We’ll see three dots used this way again in §8.3.2, where they are used to indicate that all remaining function arguments should be collected into a single array.
