@@ -73,6 +73,12 @@
 			this.value = value;
 			console.log(`You passed ${this.value} to this Class constructor`);
 	  }
+
+	  click = () => {alert(this.value);}
+  	/*The class field click = () => {...} is created on a per-object basis,
+  	there’s a separate function for each Button object, with this inside it referencing that object.
+  	We can pass button.click around anywhere, and the value of this will always be correct.
+		That’s especially useful in browser environment, for event listeners.*/
 	
 		methodName(anotherValue){
 			console.log(`You passed ${anotherValue} to this method`);
